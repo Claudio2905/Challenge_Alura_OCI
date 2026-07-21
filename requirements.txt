@@ -1,0 +1,9 @@
+langchain
+langgraph
+langchain-cohere
+langchain-classic
+langchain-community
+langchain-text-splitters
+pymupdf
+python-dotenv
+faiss-cpu
