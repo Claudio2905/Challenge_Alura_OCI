@@ -111,3 +111,67 @@ def busqueda_de_respuestas_RAG(pregunta) -> Dict:
         return {"respuesta": "No lo sé", "citaciones": [], "documentos_encontrados": False}
 
     return {"respuesta": answer, "citaciones": documentos_relacionados, "documentos_encontrados": True}
+
+from typing import TypedDict, Optional
+
+class AgentState(TypedDict, total=False):
+    pregunta: str
+    triaje: dict
+    respuesta: Optional[str]
+    citaciones: Optional[list]
+    documentos_encontrados: Optional[bool]
+    rag_exito: bool
+    accion_final: str
+
+def nodo_triaje(state: AgentState) -> AgentState:
+    return {"triaje": triaje(state["pregunta"])}
+
+def nodo_auto_resolver(state: AgentState) -> AgentState:
+    respuesta_RAG = busqueda_de_respuestas_RAG(state["pregunta"])
+    update: AgentState = {
+        "respuesta": respuesta_RAG["respuesta"],
+        "citaciones": respuesta_RAG["citaciones"],
+        "rag_exito": respuesta_RAG["documentos_encontrados"]
+    }
+    update["accion_final"] = "AUTO_RESOLVER" if respuesta_RAG["documentos_encontrados"] else "PEDIR_INFO"
+    return update
+
+def nodo_pedir_info(state: AgentState) -> AgentState:
+    return {"respuesta": "Necesito más informaciones sobre tu pedido.", "citaciones": [], "accion_final": "PEDIR_INFO"}
+
+def nodo_abrir_ticket(state: AgentState) -> AgentState:
+    tri = state["triaje"]
+    return {"respuesta": f"Abrir ticket con urgencia {tri['urgencia']}. Pedido: {state['pregunta']}.", "citaciones": [], "accion_final": "ABRIR_TICKET"}
+
+def arista_decision_triaje(state: AgentState) -> str:
+    tri = state["triaje"]
+    if tri["decision"] == "AUTO_RESOLVER":
+        return "rag"
+    elif tri["decision"] == "PEDIR_INFO":
+        return "info"
+    else:
+        return "ticket"
+
+def arista_decision_rag(state: AgentState) -> str:
+    if state["rag_exito"]:
+        return "ok"
+    KEYWORDS_ABRIR_TICKET = ["aprobación", "aprobar", "excepción", "liberación", "autorización", "autorizar", "abrir ticket", "acceso especial"]
+    if any(keyword in state["pregunta"].lower() for keyword in KEYWORDS_ABRIR_TICKET):
+        return "ticket"
+    return "info"
+
+from langgraph.graph import START, END, StateGraph
+
+workflow = StateGraph(AgentState)
+workflow.add_node("triaje", nodo_triaje)
+workflow.add_node("auto_resolver", nodo_auto_resolver)
+workflow.add_node("pedir_info", nodo_pedir_info)
+workflow.add_node("abrir_ticket", nodo_abrir_ticket)
+
+workflow.add_edge(START, "triaje")
+workflow.add_conditional_edges("triaje", arista_decision_triaje, {"rag": "auto_resolver", "info": "pedir_info", "ticket": "abrir_ticket"})
+workflow.add_conditional_edges("auto_resolver", arista_decision_rag, {"info": "pedir_info", "ticket": "abrir_ticket", "ok": END})
+workflow.add_edge("pedir_info", END)
+workflow.add_edge("abrir_ticket", END)
+
+grafo = workflow.compile()
