@@ -82,3 +82,32 @@ retriever = vectorstore.as_retriever(
     search_type="similarity_score_threshold",
     search_kwargs={"score_threshold": 0.3, "k": 3}
 )
+
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_classic.chains.combine_documents import create_stuff_documents_chain
+
+prompt_rag = ChatPromptTemplate(
+    [
+        ("system",
+            """Eres un especialista en triaje del Service Desk de la empresa BimBam Buy.
+            Responde siempre en español utilizando únicamente la información contenida en los documentos internos cargados.
+            Si la respuesta no está en los documentos, responde exactamente con: "No lo sé".
+            """
+        ),
+        ("human", "Contexto: {context}\nPregunta del empleado: {input}")
+    ]
+)
+
+document_chain = create_stuff_documents_chain(llm, prompt_rag)
+
+def busqueda_de_respuestas_RAG(pregunta) -> Dict:
+    documentos_relacionados = retriever.invoke(pregunta)
+    if not documentos_relacionados:
+        return {"respuesta": "No lo sé", "citaciones": [], "documentos_encontrados": False}
+
+    answer = document_chain.invoke({"input": pregunta, "context": documentos_relacionados})
+
+    if answer.rstrip(".!?") == "No lo sé":
+        return {"respuesta": "No lo sé", "citaciones": [], "documentos_encontrados": False}
+
+    return {"respuesta": answer, "citaciones": documentos_relacionados, "documentos_encontrados": True}
