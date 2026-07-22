@@ -175,3 +175,7 @@ workflow.add_edge("pedir_info", END)
 workflow.add_edge("abrir_ticket", END)
 
 grafo = workflow.compile()
+
+def responder_usuario(pregunta: str) -> str:
+    salida = grafo.invoke({"pregunta": pregunta})
+    return salida["respuesta"]
