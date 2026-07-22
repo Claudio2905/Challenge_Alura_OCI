@@ -68,3 +68,17 @@ for n in Path("docs_bimbambuy/").glob("*.pdf"):
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=30)
 chunks = splitter.split_documents(docs)
+
+from langchain_cohere import CohereEmbeddings
+modelo_embeddings = CohereEmbeddings(
+    model="embed-multilingual-v3.0",
+    cohere_api_key=COHERE_API_KEY
+)
+
+from langchain_community.vectorstores import FAISS
+vectorstore = FAISS.from_documents(chunks, modelo_embeddings)
+
+retriever = vectorstore.as_retriever(
+    search_type="similarity_score_threshold",
+    search_kwargs={"score_threshold": 0.3, "k": 3}
+)
