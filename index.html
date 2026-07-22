@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BimBam Buy · Asistente de Atención al Cliente</title>
+
+  <!-- Bootstrap 5 (grid, offcanvas component) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Tipografías: Baloo 2 (marca / bounce) + Inter (cuerpo) + JetBrains Mono (metadatos) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="app" id="app">
+
+    <!-- ===== Sidebar (desktop) / Offcanvas (mobile) ===== -->
+    <aside class="sidebar" id="sidebarDesktop">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <span class="dot dot-bim"></span>
+          <span class="dot dot-bam"></span>
+        </span>
+        <div class="brand-text">
+          <span class="brand-name">BimBam<strong>Buy</strong></span>
+          <span class="brand-tag">Centro de ayuda</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <p class="sidebar-label">Preguntas sugeridas</p>
+        <div class="suggested-list" id="suggestedListDesktop">
+          <!-- inyectado por script.js -->
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <span class="status-chip">
+          <span class="status-dot" id="statusDotDesktop"></span>
+          <span id="statusTextDesktop">Conectando…</span>
+        </span>
+        <p class="sidebar-footnote">Respuestas basadas únicamente en los documentos internos de BimBam Buy.</p>
+      </div>
+    </aside>
+
+    <!-- Offcanvas equivalente para mobile -->
+    <div class="offcanvas offcanvas-start sidebar-offcanvas" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel">
+      <div class="offcanvas-header">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <span class="dot dot-bim"></span>
+            <span class="dot dot-bam"></span>
+          </span>
+          <div class="brand-text">
+            <span class="brand-name">BimBam<strong>Buy</strong></span>
+            <span class="brand-tag">Centro de ayuda</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+      </div>
+      <div class="offcanvas-body">
+        <p class="sidebar-label">Preguntas sugeridas</p>
+        <div class="suggested-list" id="suggestedListMobile">
+          <!-- inyectado por script.js -->
+        </div>
+        <p class="sidebar-footnote mt-4">Respuestas basadas únicamente en los documentos internos de BimBam Buy.</p>
+      </div>
+    </div>
+
+    <!-- ===== Panel de chat ===== -->
+    <main class="chat-panel">
+
+      <header class="chat-header">
+        <button class="hamburger d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas" aria-label="Abrir preguntas sugeridas">
+          <span></span><span></span><span></span>
+        </button>
+
+        <div class="chat-header-info">
+          <h1>Asistente virtual</h1>
+          <p>Envíos · Garantías · Reembolsos · Métodos de pago</p>
+        </div>
+
+        <span class="status-chip d-lg-none">
+          <span class="status-dot" id="statusDotMobile"></span>
+        </span>
+      </header>
+
+      <section class="chat-scroll" id="chatScroll" aria-live="polite">
+        <!-- los mensajes se inyectan por script.js -->
+      </section>
+
+      <form class="composer" id="composerForm" autocomplete="off">
+        <label for="composerInput" class="visually-hidden">Escribe tu pregunta</label>
+        <input
+          type="text"
+          id="composerInput"
+          class="composer-input"
+          placeholder="Escribe tu pregunta sobre envíos, garantías, reembolsos o pagos…"
+          maxlength="500"
+          required
+        >
+        <button type="submit" class="composer-send" id="composerSend" aria-label="Enviar pregunta">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <polyline points="14 6 20 12 14 18"></polyline>
+          </svg>
+        </button>
+      </form>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
