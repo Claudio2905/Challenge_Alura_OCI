@@ -7,3 +7,7 @@ langchain-text-splitters
 pymupdf
 python-dotenv
 faiss-cpu
+fastapi
+pydantic
+langchain-core
+uvicorn
