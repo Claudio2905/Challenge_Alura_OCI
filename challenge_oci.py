@@ -53,3 +53,18 @@ def triaje(mensaje: str) -> Dict:
         ]
     )
     return salida.model_dump()
+
+from pathlib import Path
+from langchain_community.document_loaders import PyMuPDFLoader
+
+docs = []
+for n in Path("docs_bimbambuy/").glob("*.pdf"):
+    try:
+        loader = PyMuPDFLoader(str(n))
+        docs.extend(loader.load())
+    except Exception as e:
+        print(f"Error cargando archivo: {n.name}: {e}")
+
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=30)
+chunks = splitter.split_documents(docs)
