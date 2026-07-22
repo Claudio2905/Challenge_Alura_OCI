@@ -179,3 +179,16 @@ grafo = workflow.compile()
 def responder_usuario(pregunta: str) -> str:
     salida = grafo.invoke({"pregunta": pregunta})
     return salida["respuesta"]
+
+# mensajes_de_prueba = [
+#     "¿Puedo obtener un reembolso por el internet de mi home office?",
+#     "Quiero una excepción para teletrabajar durante 5 días.",
+#     "¿Cómo funciona la política de métodos de pago?",
+#     "¿Existe una política para reembolsos?",
+#     "¿Quién fue Napoleón Bonaparte?"
+# ]
+# for pregunta in mensajes_de_prueba:
+#     respuesta = grafo.invoke({"pregunta": pregunta})
+#     print(f"PREGUNTA: {pregunta}")
+#     print(f"DECISION DE TRIAJE: {respuesta['triaje']['decision']} | URGENCIA: {respuesta['triaje']['urgencia']} | ACCIÓN FINAL: {respuesta['accion_final']}")
+#     print(f"RESPUESTA: {respuesta['respuesta']}")
