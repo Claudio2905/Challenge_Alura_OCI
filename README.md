@@ -123,11 +123,16 @@ URL de la aplicación desplegada:
 
 ### Capturas
 
-- ![Captura del despliegue en Render](./docs_readme/Captura%20de%20pantalla%202026-07-22%20203134.png)
+<img width="1900" height="936" alt="Captura de pantalla 2026-07-22 203134" src="https://github.com/user-attachments/assets/952d2ecd-18b3-4e86-bc58-19c55eb666a4" />
+
 
 ### Video
 
-- [Ver video de demostración](./docs_readme/Grabación%20de%20pantalla%202026-07-22%20203632.mp4)
+
+
+https://github.com/user-attachments/assets/63db9c07-51c7-4512-b0cb-0725008b9a9f
+
+
 
 ## Estructura del proyecto
 
