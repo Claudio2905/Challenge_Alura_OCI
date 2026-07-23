@@ -5,7 +5,7 @@
 // ============================================================
 
 // Cambia esta URL si tu backend corre en otro host/puerto.
-const API_URL = "http://127.0.0.1:8000/preguntar";
+const API_URL = "/preguntar";
 
 const SUGGESTED_QUESTIONS = [
   "¿Cuáles son los tipos de envíos disponibles?",
