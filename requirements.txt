@@ -11,3 +11,4 @@ fastapi
 pydantic
 langchain-core
 uvicorn
+aiofiles
